@@ -1,0 +1,9 @@
+@import './colors.scss';
+
+header{
+    background-color: $header-background-color;
+    color: $header-text-color;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

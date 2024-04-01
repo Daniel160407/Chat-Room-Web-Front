@@ -1,0 +1,27 @@
+@import './colors.scss';
+
+#roomsList {
+    display: flex;
+    justify-content: center;
+}
+
+#container {
+    background-color: $rooms-list-background-color;
+    width: 800px;
+
+    button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 10px;
+        background-color: $add-room-btn-background-color;
+        color: $add-room-btn-text-color;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 500px;
+    }
+}
