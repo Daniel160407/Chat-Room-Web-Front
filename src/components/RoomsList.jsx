@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import '../styles/roomsList.scss'
+import React, { useEffect, useState } from 'react';
+import '../styles/roomsList.scss';
 
-function RoomsList(){
-    const [rooms, setRooms] = useState([]);
+function RoomsList() {
+    const [jsonArray, setJsonArray] = useState(null);
 
-    useEffect(()=>{
-        fetch('/ChatRoom/room')
-        .then(response=>response.json())
-        .then(data=>{
-            setRooms(data.name);
-            console.log("gello");
-        });
-    },[]);
+    useEffect(() => {
+        fetch('http://localhost:8080/ChatRoom/room')
+            .then(response => response.json())
+            .then(data => {
+                setJsonArray(data);
+                console.log(data);
+            });
+    }, []);
 
     return (
         <div id='roomsList'>
@@ -20,14 +20,16 @@ function RoomsList(){
                     <button id='addRoomButton'>Add Room</button>
                 </div>
                 <div id='rooms'>
-                    {rooms.map(room=>(
-                        <div className='room' key={room.id}>
-                            {room.name}
-                            <div>
-                                {room.maxMembers}
+                    {jsonArray ? (
+                        jsonArray.map((room, index) => (
+                            <div key={index}>
+                                <h1>{room.name}</h1>
+                                <h3>{room.maxMembers}</h3>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    ) : (
+                        <h1>Loading...</h1>
+                    )}
                 </div>
             </div>
         </div>

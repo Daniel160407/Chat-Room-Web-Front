@@ -3,6 +3,7 @@
 #roomsList {
     display: flex;
     justify-content: center;
+    padding-top: 20px;
 }
 
 #container {
@@ -23,5 +24,17 @@
         cursor: pointer;
         transition: background-color 0.3s;
         width: 500px;
+    }
+}
+
+#rooms{
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    div {
+        background-color: #9290C3;
+        display: flex;
+        border-radius: 20px;
     }
 }
