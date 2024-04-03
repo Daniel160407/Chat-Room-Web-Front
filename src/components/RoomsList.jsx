@@ -6,7 +6,7 @@ import ChatHeader from './ChatHeader';
 
 function RoomsList() {
     const [jsonArray, setJsonArray] = useState(null);
-    const [isAddRoomWindowVisible,setAddRoomWindowVisible] = useState(false);
+    const [isAddRoomWindowVisible, setAddRoomWindowVisible] = useState(false);
 
     useEffect(() => {
         fetch('http://localhost:8080/ChatRoom/room')
@@ -17,21 +17,25 @@ function RoomsList() {
             });
     }, []);
 
-    
-
-    async function enterRoom(roomId,roomName){
+    function enterRoom(roomId, roomName) {
         root.render(
             <React.StrictMode>
-                <ChatHeader chatName={roomName}/>
-                <Chat/>
+                <ChatHeader chatName={roomName} />
+                <Chat />
             </React.StrictMode>
         );
     }
 
-    function showAddRoomWindow(){
-        console.log("WOWJDKOHSKDGAJKSDBVJSBADJSHBDASBDBASHDS");
-        console.log(isAddRoomWindowVisible);
+    function showAddRoomWindow() {
         setAddRoomWindowVisible(!isAddRoomWindowVisible);
+    }
+
+    function addRoom() {
+        fetch(`http://localhost:8080/ChatRoom/room?name=${document.getElementById('name').value}&maxMembers=${document.getElementById('maxMembers').value}`,{method:'POST'})
+        .then(response => response.json())
+        .then(data => {
+            console.log("Posts data: "+data);
+        })
     }
 
     return (
@@ -43,7 +47,7 @@ function RoomsList() {
                 <div id='rooms'>
                     {jsonArray ? (
                         jsonArray.map((room, index) => (
-                            <div className='room' key={index} onClick={() => enterRoom(room.id,room.name)} >
+                            <div className='room' key={index} onClick={() => enterRoom(room.id, room.name)}>
                                 <h1>{room.name}</h1>
                                 <h3>{room.maxMembers}</h3>
                             </div>
@@ -56,7 +60,14 @@ function RoomsList() {
                 </div>
                 <div id='addRoomWindow'>
                     <div id='addRoomMenu' className={isAddRoomWindowVisible ? 'visible' : 'invisible'}>
-                        <h1>{isAddRoomWindowVisible ? 'visible' : 'invisible'}</h1>
+                        <h2>Add New Room</h2>
+                        <form id='addRoomForm' onSubmit={addRoom}>
+                            <h3>Room Name:</h3>
+                            <input id='name' type='text' />
+                            <h3>Maximum Members:</h3>
+                            <input id='maxMembers' type='text' />
+                            <button type='submit'>Add</button>
+                        </form>
                     </div>
                 </div>
             </div>
