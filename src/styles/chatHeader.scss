@@ -1,0 +1,39 @@
+@import './colors.scss';
+
+.chatHeader {
+    background-color: $header-background-color;
+    color: $header-text-color;
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    justify-content: center;
+}
+
+#profile {
+    display: flex;
+    justify-self: flex-start;
+    padding-left: 20px;
+
+    #profileImg {
+        border-radius: 50%;
+        width: 40px;
+        align-self: center;
+    }
+}
+
+#profileSettings{
+    position: fixed;
+    z-index: 100px;
+    background-color: $profile-settings-background-color;
+    top: 80px;
+    left: 10px;
+    width: 400px;
+}
+
+.visible {
+    display: block;
+}
+
+.invisible {
+    display: none;
+}

@@ -27,7 +27,7 @@
     }
 }
 
-#rooms{
+#rooms {
     gap: 20px;
     display: flex;
     flex-direction: column;
@@ -37,4 +37,97 @@
         display: flex;
         border-radius: 20px;
     }
+}
+
+.room {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+
+    h3 {
+        align-self: center;
+    }
+}
+
+#loadingWindow {
+    display: flex;
+    justify-content: center;
+}
+
+.loader {
+    width: 65px;
+    aspect-ratio: 1;
+    position: relative;
+  
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      border-radius: 50px;
+      box-shadow: 0 0 0 3px inset #fff;
+      animation: l4 2.5s infinite;
+    }
+  
+    &:after {
+      animation-delay: -1.25s;
+    }
+  }
+  
+  @keyframes l4 {
+    0% {
+      inset: 0 35px 35px 0;
+    }
+    12.5% {
+      inset: 0 35px 0 0;
+    }
+    25% {
+      inset: 35px 35px 0 0;
+    }
+    37.5% {
+      inset: 35px 0 0 0;
+    }
+    50% {
+      inset: 35px 0 0 35px;
+    }
+    62.5% {
+      inset: 0 0 0 35px;
+    }
+    75% {
+      inset: 0 0 35px 35px;
+    }
+    87.5% {
+      inset: 0 0 35px 0;
+    }
+    100% {
+      inset: 0 35px 35px 0;
+    }
+  }
+
+#addRoomWindow {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    width: 100%;
+    z-index: 1000;
+    padding-top: 100px;
+}
+
+#addRoomMenu {
+  background-color: $add-room-background-color;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  color: white;
+}
+
+.visible {
+  display: block;
+}
+
+.invisible {
+  display: none;
 }
