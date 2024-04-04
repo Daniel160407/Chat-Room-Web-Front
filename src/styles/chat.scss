@@ -1,9 +1,21 @@
 @import './colors.scss';
 
-.chat {
+#room {
+    display: flex;
+    flex-direction: column;
+    align-content: end;
+    justify-content: center;
+    height: 100%;
+}
+
+#chat {
     background-color: $header-background-color;
     color: $header-text-color;
     width: 100%;
     display: flex;
     justify-content: center;
+}
+
+#textInput {
+    background-color: $header-background-color;
 }
