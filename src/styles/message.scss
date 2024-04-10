@@ -1,0 +1,13 @@
+@import './colors.scss';
+
+.message {
+    background-color: $message-background-color;
+}
+
+.receivedMessage {
+    justify-self: start;
+}
+
+.sentMessage {
+    justify-self: end;
+}

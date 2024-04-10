@@ -1,31 +1,82 @@
+import React, { useState, useEffect, useRef } from 'react'; // Import useRef
 import '../styles/chat.scss';
 import Message from './Message';
 
-function Chat(){
-    const socket=new WebSocket('ws://localhost:8080/ChatRoom/chatEndpoint');
+function Chat() {
+    const [messageText, setMessageText] = useState('');
+    const [messages, setMessages] = useState([]);
+    const [socket, setSocket] = useState(null);
+    const chatRef = useRef(null); // Create a ref for the chat div
 
-    socket.onopen=function(event){
-        onOpen(event);
+    useEffect(() => {
+        const newSocket = new WebSocket('ws://localhost:8080/ChatRoom/chatEndpoint');
+
+        newSocket.onopen = function(event) {
+            console.log('WebSocket connected');
+        };
+
+        newSocket.onmessage = function(event) {
+            console.log('Received message:', event.data);
+            const message = JSON.parse(event.data);
+            message.received = true;
+            setMessages(prevMessages => [...prevMessages, message]);
+        };
+
+        newSocket.onerror = function(event) {
+            console.error('WebSocket error:', event);
+        };
+
+        setSocket(newSocket);
+
+        return () => {
+            newSocket.close();
+        };
+    }, []);
+
+    function sendMessage() {
+        if (messageText.trim() !== '' && socket) {
+            const messageObject = {
+                type: 'PublicMessage',
+                message: messageText
+            };
+            socket.send(JSON.stringify(messageObject));
+            messageObject.received=false;
+            setMessages(prevMessages => [...prevMessages, messageObject]);
+            setMessageText('');
+        }
     }
 
-    socket.onmessage=function(event){
-        onMessage(event);
+    useEffect(() => {
+        if (chatRef.current) {
+            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }
+    }, [messages]);
+    
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            console.log("value: "+event.target.value);
+            setMessageText(event.target.value);
+            sendMessage();
+            event.target.value='';
+        }
     }
 
-    socket.onerror=function(event){
-        console.log(event);
-    }
-
-    function onOpen(event){
-        console.log(event)
-        document.getElementById('chat').innerHTML+=<Message message={event.data}/>;
-    }
-
-    return(
+    return (
         <div id='room'>
-            <div id='chat'></div>
+            <div id='chat' ref={chatRef}>
+                {messages.map((message, index) => (
+                    (message.type === 'PublicMessage' || message.type === 'PrivateMessage') ?
+                    <Message key={index} message={message} />
+                    : null
+                ))}
+            </div>
             <div id='textInput'>
-                <input type='text' placeholder='Write something'></input>
+                <input
+                    type='text'
+                    placeholder='Write something'
+                    onKeyPress={handleKeyPress}
+                />
+                <button onClick={sendMessage}>Send</button>
             </div>
         </div>
     );
