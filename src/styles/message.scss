@@ -1,13 +1,29 @@
 @import './colors.scss';
 
+.messageContainer {
+    border-radius: 10px;
+    width: auto;
+    height: 50px;
+    align-content: center;
+}
+
 .message {
-    background-color: $message-background-color;
+    padding: 5px;
 }
 
 .receivedMessage {
     justify-self: start;
+    margin-left: 10px;
+    background-color: $received-message-background-color;
 }
 
 .sentMessage {
     justify-self: end;
+    margin-right: 10px;
+    background-color: $sent-message-background-color;
+}
+
+.notification {
+    justify-self: center;
+    color: red;
 }

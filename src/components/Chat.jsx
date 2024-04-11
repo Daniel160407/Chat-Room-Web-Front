@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'; // Import useRef
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/chat.scss';
 import Message from './Message';
 
@@ -6,7 +6,7 @@ function Chat() {
     const [messageText, setMessageText] = useState('');
     const [messages, setMessages] = useState([]);
     const [socket, setSocket] = useState(null);
-    const chatRef = useRef(null); // Create a ref for the chat div
+    const chatRef = useRef(null);
 
     useEffect(() => {
         const newSocket = new WebSocket('ws://localhost:8080/ChatRoom/chatEndpoint');
@@ -33,7 +33,7 @@ function Chat() {
         };
     }, []);
 
-    function sendMessage() {
+    function sendMessage() { //Requiers bug fix with message sending
         if (messageText.trim() !== '' && socket) {
             const messageObject = {
                 type: 'PublicMessage',
@@ -65,9 +65,7 @@ function Chat() {
         <div id='room'>
             <div id='chat' ref={chatRef}>
                 {messages.map((message, index) => (
-                    (message.type === 'PublicMessage' || message.type === 'PrivateMessage') ?
                     <Message key={index} message={message} />
-                    : null
                 ))}
             </div>
             <div id='textInput'>
@@ -76,7 +74,6 @@ function Chat() {
                     placeholder='Write something'
                     onKeyPress={handleKeyPress}
                 />
-                <button onClick={sendMessage}>Send</button>
             </div>
         </div>
     );
