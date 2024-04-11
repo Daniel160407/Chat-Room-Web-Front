@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import '../styles/chatHeader.scss';
+import Header from './Header';
+import RoomsList from './RoomsList';
+import root from '../script/root';
 
 function ChatHeader({chatName, onUserNameChange }) {
+    const [leaveChat, setLeaveChat] = useState(false);
     const [isProfileVisible, setProfileVisible] = useState(false);
 
     function toggleProfileVisible() {
@@ -17,6 +21,10 @@ function ChatHeader({chatName, onUserNameChange }) {
         }
     }
 
+    function leave() {
+        setLeaveChat(true);
+    }
+
     return (
         <div className="chatHeader">
             <div id='profile'>
@@ -29,6 +37,17 @@ function ChatHeader({chatName, onUserNameChange }) {
                 <div>
                     <h3>Change Name</h3>
                     <input id='userName' type='text' onKeyPress={handleKeyPress}></input>
+                    <div>
+                    <button id='leaveBtn' onClick={leave}>Leave Chat</button>
+                    {leaveChat && (
+                        root.render(
+                            <React.StrictMode>
+                                <Header/>
+                                <RoomsList/>
+                            </React.StrictMode>
+                        )
+                    )}
+                </div>
                 </div>
             </div>
         </div>
