@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/roomsList.scss';
 import root from '../script/root';
-import Chat from './Chat';
-import ChatHeader from './ChatHeader';
+import User from './User';
 
 function RoomsList() {
     const [jsonArray, setJsonArray] = useState(null);
@@ -20,8 +19,7 @@ function RoomsList() {
     function enterRoom(roomId, roomName) {
         root.render(
             <React.StrictMode>
-                <ChatHeader chatName={roomName} />
-                <Chat />
+                <User chatName={roomName}/>
             </React.StrictMode>
         );
     }

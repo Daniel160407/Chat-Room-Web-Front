@@ -1,40 +1,43 @@
 @import './colors.scss';
 
 #room {
-    display: flex;
-    flex-direction: column;
-    align-content: end;
-    justify-content: center;
-    height: 100%;
-}
+  flex-direction: column;
+  height: 85vh;
+  display: flex;
 
-#chat {
-    background-color: $header-background-color;
-    color: $header-text-color;
-    width: 100%;
-    display: grid;
-    gap: 10px;
-}
-
-#textInput {
-    background-color: $header-background-color;
-}
-
-input[type="text"] {
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-  
-    &:focus {
-      border-color: #007bff;
-      outline: none;
-      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
-  
-    &::placeholder {
-      color: #999;
-    }
+  #chat {
+      overflow-y: auto;
+      padding: 20px;
+      background-color: $root-background-color;
+      color: $header-text-color;
+      width: 100%;
+      display: grid;
+      gap: 10px;
+      overflow: auto;
+      height: 100%;
   }
-  
+
+  #textInput {
+      padding: 20px;
+      background-color: $root-background-color;
+
+      input {
+        padding: 10px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+        width: 400px;
+      
+        &:focus {
+          border-color: #007bff;
+          outline: none;
+          box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+      
+        &::placeholder {
+          color: #999;
+        }
+      }
+  }
+}

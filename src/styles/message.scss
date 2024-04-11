@@ -5,10 +5,12 @@
     width: auto;
     height: 50px;
     align-content: center;
-}
+    display: flex;
 
-.message {
-    padding: 5px;
+    h3 {
+        align-self: center;
+        padding: 10px;
+    }
 }
 
 .receivedMessage {
@@ -26,4 +28,5 @@
 .notification {
     justify-self: center;
     color: red;
+    background-color: $root-background-color;
 }

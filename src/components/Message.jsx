@@ -3,15 +3,14 @@ import '../styles/message.scss';
 
 function Message({ message }) {
     const [isVisible, setIsVisible] = useState(message.type === 'Notification');
+    const [isNotification, setIsNotification] = useState(message.type === 'Notification');
 
     useEffect(() => {
         if (message.type === 'Notification') {
-            // Set a timer to hide the notification after 3 seconds
             const timer = setTimeout(() => {
                 setIsVisible(false);
             }, 3000);
 
-            // Clean up the timer when the component unmounts or when the message changes
             return () => clearTimeout(timer);
         }
     }, [message]);
@@ -31,9 +30,21 @@ function Message({ message }) {
         <>
             {isVisible && (
                 <div className={"messageContainer " + place}>
-                    <h3 className='message'>{message.type === 'Notification' ? message.notification : message.message}</h3>
+                    <h3 className='message'>{message.type === 'Notification' ? message.notification : null}</h3>
                 </div>
             )}
+            {(!isNotification && message.received) ?(
+                <>
+                <div className={'messageContainer ' + place}>
+                    <h3>{message.sender!=='' ? message.sender : 'User'}: </h3>
+                    <h3 className='message'>{message.message}</h3>
+                </div>
+                </>
+            ):
+                <div className={'messageContainer ' + place}>
+                    <h3 className='message'>{message.message}</h3>
+                </div>
+            }
         </>
     );
 }

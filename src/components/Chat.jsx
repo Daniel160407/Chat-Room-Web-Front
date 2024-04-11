@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../styles/chat.scss';
 import Message from './Message';
 
-function Chat() {
+function Chat({ userName }) {
     const [messageText, setMessageText] = useState('');
     const [messages, setMessages] = useState([]);
     const [socket, setSocket] = useState(null);
@@ -33,10 +33,11 @@ function Chat() {
         };
     }, []);
 
-    function sendMessage() { //Requiers bug fix with message sending
+    function sendMessage() {
         if (messageText.trim() !== '' && socket) {
             const messageObject = {
                 type: 'PublicMessage',
+                sender: userName,
                 message: messageText
             };
             socket.send(JSON.stringify(messageObject));
@@ -54,7 +55,6 @@ function Chat() {
     
     function handleKeyPress(event) {
         if (event.key === 'Enter') {
-            console.log("value: "+event.target.value);
             setMessageText(event.target.value);
             sendMessage();
             event.target.value='';
