@@ -5,8 +5,8 @@ import RoomsList from './components/RoomsList'
 import root from './script/root'
 
 root.render(
-  <React.StrictMode>
+  <>
     <Header />
     <RoomsList/>
-  </React.StrictMode>,
+  </>
 )

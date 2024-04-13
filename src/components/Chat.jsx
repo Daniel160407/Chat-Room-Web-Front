@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+// eslint-disable-next-line no-unused-vars
+import React, {useState, useEffect, useRef} from 'react';
 import '../styles/chat.scss';
 import Message from './Message';
 
-function Chat({ userName }) {
+// eslint-disable-next-line react/prop-types
+function Chat({userName, setCurrentMembers}) {
     const [messageText, setMessageText] = useState('');
     const [messages, setMessages] = useState([]);
     const [socket, setSocket] = useState(null);
@@ -11,18 +13,22 @@ function Chat({ userName }) {
     useEffect(() => {
         const newSocket = new WebSocket('ws://localhost:8080/ChatRoom/chatEndpoint');
 
-        newSocket.onopen = function(event) {
+        newSocket.onopen = function () {
             console.log('WebSocket connected');
         };
 
-        newSocket.onmessage = function(event) {
+        newSocket.onmessage = function (event) {
             console.log('Received message:', event.data);
             const message = JSON.parse(event.data);
             message.received = true;
             setMessages(prevMessages => [...prevMessages, message]);
+
+            if (message.type === 'Notification') {
+                setCurrentMembers(message.membersAmount);
+            }
         };
 
-        newSocket.onerror = function(event) {
+        newSocket.onerror = function (event) {
             console.error('WebSocket error:', event);
         };
 
@@ -41,7 +47,7 @@ function Chat({ userName }) {
                 message: messageText
             };
             socket.send(JSON.stringify(messageObject));
-            messageObject.received=false;
+            messageObject.received = false;
             setMessages(prevMessages => [...prevMessages, messageObject]);
             setMessageText('');
         }
@@ -52,12 +58,12 @@ function Chat({ userName }) {
             chatRef.current.scrollTop = chatRef.current.scrollHeight;
         }
     }, [messages]);
-    
+
     function handleKeyPress(event) {
         if (event.key === 'Enter') {
             setMessageText(event.target.value);
             sendMessage();
-            event.target.value='';
+            event.target.value = '';
         }
     }
 
@@ -65,7 +71,7 @@ function Chat({ userName }) {
         <div id='room'>
             <div id='chat' ref={chatRef}>
                 {messages.map((message, index) => (
-                    <Message key={index} message={message} />
+                    <Message key={index} message={message}/>
                 ))}
             </div>
             <div id='textInput'>

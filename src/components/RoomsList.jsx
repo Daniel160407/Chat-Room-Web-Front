@@ -2,25 +2,38 @@ import React, { useEffect, useState } from 'react';
 import '../styles/roomsList.scss';
 import root from '../script/root';
 import User from './User';
+import axios from 'axios';
 
 function RoomsList() {
     const [jsonArray, setJsonArray] = useState(null);
+    const [currentMembers, setCurrentMembers] = useState(0);
     const [isAddRoomWindowVisible, setAddRoomWindowVisible] = useState(false);
 
     useEffect(() => {
-        fetch('http://localhost:8080/ChatRoom/room')
-            .then(response => response.json())
-            .then(data => {
-                setJsonArray(data);
-                console.log(data);
-            });
+        axios.get('http://localhost:8080/ChatRoom/room')
+        .then(response => {
+            setJsonArray(response.data);
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+
+        axios.get('http://localhost:8080/ChatRoom/roomMembers')
+        .then(response => {
+            setCurrentMembers(response)
+            console.log(response);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
     }, []);
 
-    function enterRoom(roomId, roomName) {
+    function enterRoom(roomName) {
         root.render(
-            <React.StrictMode>
+            <>
                 <User chatName={roomName}/>
-            </React.StrictMode>
+            </>
         );
     }
 
@@ -45,9 +58,10 @@ function RoomsList() {
                 <div id='rooms'>
                     {jsonArray ? (
                         jsonArray.map((room, index) => (
-                            <div className='room' key={index} onClick={() => enterRoom(room.id, room.name)}>
+                            <div className='room' key={index} onClick={() => enterRoom(room.name)}>
                                 <h1>{room.name}</h1>
-                                <h3>{room.maxMembers}</h3>
+                                <h3>{room.currentMembers} / {room.maxMembers}</h3>
+                                <h3>{currentMembers[index]}</h3>
                             </div>
                         ))
                     ) : (
