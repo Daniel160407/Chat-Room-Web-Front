@@ -14,7 +14,7 @@ function User({ chatName }) {
     return (
         <>
             <ChatHeader chatName={chatName} onUserNameChange={handleUserNameChange} />
-            <Chat userName={userName} />
+            <Chat userName={userName} roomName={chatName}/>
         </>
     );
 }

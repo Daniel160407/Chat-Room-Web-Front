@@ -4,7 +4,7 @@ import '../styles/chat.scss';
 import Message from './Message';
 
 // eslint-disable-next-line react/prop-types
-function Chat({userName}) {
+function Chat({userName, roomName}) {
     const [messageText, setMessageText] = useState('');
     const [messages, setMessages] = useState([]);
     const [socket, setSocket] = useState(null);
@@ -20,8 +20,10 @@ function Chat({userName}) {
         newSocket.onmessage = function (event) {
             console.log('Received message:', event.data);
             const message = JSON.parse(event.data);
-            message.received = true;
-            setMessages(prevMessages => [...prevMessages, message]);
+            if(event.roomName === roomName){
+                message.received = true;
+                setMessages(prevMessages => [...prevMessages, message]);
+            }
         };
 
         newSocket.onerror = function (event) {
@@ -39,6 +41,7 @@ function Chat({userName}) {
         if (messageText.trim() !== '' && socket) {
             const messageObject = {
                 type: 'PublicMessage',
+                roomName: roomName,
                 sender: userName,
                 message: messageText
             };
