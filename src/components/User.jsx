@@ -6,7 +6,6 @@ import Chat from './Chat';
 // eslint-disable-next-line react/prop-types
 function User({ chatName }) {
     const [userName, setUserName] = useState('');
-    const [currentMembers, setCurrentMembers] = useState(0);
 
     function handleUserNameChange(newUserName) {
         setUserName(newUserName);
@@ -14,8 +13,8 @@ function User({ chatName }) {
 
     return (
         <>
-            <ChatHeader chatName={chatName} onUserNameChange={handleUserNameChange} currentMembers={currentMembers} />
-            <Chat userName={userName} setCurrentMembers={setCurrentMembers} />
+            <ChatHeader chatName={chatName} onUserNameChange={handleUserNameChange} />
+            <Chat userName={userName} />
         </>
     );
 }

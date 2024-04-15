@@ -4,7 +4,7 @@ import '../styles/chat.scss';
 import Message from './Message';
 
 // eslint-disable-next-line react/prop-types
-function Chat({userName, setCurrentMembers}) {
+function Chat({userName}) {
     const [messageText, setMessageText] = useState('');
     const [messages, setMessages] = useState([]);
     const [socket, setSocket] = useState(null);
@@ -22,10 +22,6 @@ function Chat({userName, setCurrentMembers}) {
             const message = JSON.parse(event.data);
             message.received = true;
             setMessages(prevMessages => [...prevMessages, message]);
-
-            if (message.type === 'Notification') {
-                setCurrentMembers(message.membersAmount);
-            }
         };
 
         newSocket.onerror = function (event) {

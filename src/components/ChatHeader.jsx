@@ -1,23 +1,14 @@
-import React, {useEffect, useState} from 'react';
+// eslint-disable-next-line no-unused-vars
+import React, {useState} from 'react';
 import '../styles/chatHeader.scss';
 import Header from './Header';
 import RoomsList from './RoomsList';
 import root from '../script/root';
 
 // eslint-disable-next-line react/prop-types
-function ChatHeader({chatName, onUserNameChange, currentMembers}) {
+function ChatHeader({chatName, onUserNameChange}) {
     const [leaveChat, setLeaveChat] = useState(false);
     const [isProfileVisible, setProfileVisible] = useState(false);
-
-    useEffect(() => {
-        console.log(chatName);
-        console.log(currentMembers);
-        console.log(typeof currentMembers);
-        console.log(currentMembers + 1);
-        fetch(`http://localhost:8080/ChatRoom/roomMembers?roomName=${chatName}&currentMembers=${currentMembers + 1}`, {method: 'PUT'})
-            .then(response => response.json())
-            .then(data => console.log(data));
-    }, []);
 
     function toggleProfileVisible() {
         setProfileVisible(!isProfileVisible);

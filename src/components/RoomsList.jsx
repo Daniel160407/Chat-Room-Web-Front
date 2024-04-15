@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+// eslint-disable-next-line no-unused-vars
+import React, {useEffect, useState} from 'react';
 import '../styles/roomsList.scss';
 import root from '../script/root';
 import User from './User';
@@ -6,30 +7,29 @@ import axios from 'axios';
 
 function RoomsList() {
     const [jsonArray, setJsonArray] = useState(null);
-    const [currentMembers, setCurrentMembers] = useState(0);
     const [isAddRoomWindowVisible, setAddRoomWindowVisible] = useState(false);
 
     useEffect(() => {
         axios.get('http://localhost:8080/ChatRoom/room')
-        .then(response => {
-            setJsonArray(response.data);
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
-
-        axios.get('http://localhost:8080/ChatRoom/roomMembers')
-        .then(response => {
-            setCurrentMembers(response)
-            console.log(response);
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
+            .then(response => {
+                setJsonArray(response.data);
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
     }, []);
 
     function enterRoom(roomName) {
+        const currentMembersElement = document.getElementById(roomName).querySelector('.currentMembers');
+        const currentMembers = currentMembersElement ? currentMembersElement.innerText : '';
+        console.log(currentMembers);
+        console.log(typeof currentMembers);
+
+        fetch(`http://localhost:8080/ChatRoom/roomMembers?roomName=${roomName}&currentMembers=${parseInt(currentMembers) + 1}`, {method: 'PUT'})
+            .then(response => response.json())
+            .then(data => console.log(data));
+
         root.render(
             <>
                 <User chatName={roomName}/>
@@ -42,11 +42,11 @@ function RoomsList() {
     }
 
     function addRoom() {
-        fetch(`http://localhost:8080/ChatRoom/room?name=${document.getElementById('name').value}&maxMembers=${document.getElementById('maxMembers').value}`,{method:'POST'})
-        .then(response => response.json())
-        .then(data => {
-            console.log("Posts data: "+data);
-        })
+        fetch(`http://localhost:8080/ChatRoom/room?name=${document.getElementById('name').value}&maxMembers=${document.getElementById('maxMembers').value}`, {method: 'POST'})
+            .then(response => response.json())
+            .then(data => {
+                console.log("Posts data: " + data);
+            })
     }
 
     return (
@@ -58,10 +58,10 @@ function RoomsList() {
                 <div id='rooms'>
                     {jsonArray ? (
                         jsonArray.map((room, index) => (
-                            <div className='room' key={index} onClick={() => enterRoom(room.name)}>
+                            <div id={room.name} className='room' key={index} onClick={() => enterRoom(room.name)}>
                                 <h1>{room.name}</h1>
-                                <h3>{room.currentMembers} / {room.maxMembers}</h3>
-                                <h3>{currentMembers[index]}</h3>
+                                <div><h3 className='currentMembers'>{room.currentMembers}</h3>
+                                    <h3>/{room.maxMembers}</h3></div>
                             </div>
                         ))
                     ) : (
@@ -70,14 +70,15 @@ function RoomsList() {
                         </div>
                     )}
                 </div>
+
                 <div id='addRoomWindow'>
                     <div id='addRoomMenu' className={isAddRoomWindowVisible ? 'visible' : 'invisible'}>
                         <h2>Add New Room</h2>
                         <form id='addRoomForm' onSubmit={addRoom}>
                             <h3>Room Name:</h3>
-                            <input id='name' type='text' />
+                            <input id='name' type='text'/>
                             <h3>Maximum Members:</h3>
-                            <input id='maxMembers' type='text' />
+                            <input id='maxMembers' type='text'/>
                             <button type='submit'>Add</button>
                         </form>
                     </div>
