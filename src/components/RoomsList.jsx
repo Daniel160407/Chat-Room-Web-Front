@@ -23,8 +23,6 @@ function RoomsList() {
     function enterRoom(roomName) {
         const currentMembersElement = document.getElementById(roomName).querySelector('.currentMembers');
         const currentMembers = currentMembersElement ? currentMembersElement.innerText : '';
-        console.log(currentMembers);
-        console.log(typeof currentMembers);
 
         fetch(`http://localhost:8080/ChatRoom/roomMembers?roomName=${roomName}&currentMembers=${parseInt(currentMembers) + 1}`, {method: 'PUT'})
             .then(response => response.json())
@@ -32,7 +30,7 @@ function RoomsList() {
 
         root.render(
             <>
-                <User chatName={roomName}/>
+                <User chatName={roomName} currentMembers={currentMembers}/>
             </>
         );
     }

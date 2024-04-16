@@ -1,10 +1,9 @@
-// eslint-disable-next-line no-unused-vars
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/chat.scss';
 import Message from './Message';
+import axios from 'axios';
 
-// eslint-disable-next-line react/prop-types
-function Chat({userName, roomName}) {
+function Chat({ userName, roomName, currentMembers, setWebSocket }) {
     const [messageText, setMessageText] = useState('');
     const [messages, setMessages] = useState([]);
     const [socket, setSocket] = useState(null);
@@ -15,15 +14,20 @@ function Chat({userName, roomName}) {
 
         newSocket.onopen = function () {
             console.log('WebSocket connected');
+            setWebSocket(newSocket);
         };
 
         newSocket.onmessage = function (event) {
             console.log('Received message:', event.data);
             const message = JSON.parse(event.data);
-            if(event.roomName === roomName){
+            if (event.roomName === roomName) {
                 message.received = true;
                 setMessages(prevMessages => [...prevMessages, message]);
             }
+        };
+
+        newSocket.onclose = function () {
+            axios.put(`http://localhost:8080/ChatRoom/roomMembers?roomName=${roomName}&currentMembers=${parseInt(currentMembers)}`);
         };
 
         newSocket.onerror = function (event) {
@@ -32,10 +36,17 @@ function Chat({userName, roomName}) {
 
         setSocket(newSocket);
 
-        return () => {
-            newSocket.close();
-        };
+        window.onbeforeunload = () => {
+            axios.put(`http://localhost:8080/ChatRoom/roomMembers?roomName=${roomName}&currentMembers=${parseInt(currentMembers)}`);
+        }
     }, []);
+
+    function handleUnload() {
+        if (socket) {
+            axios.put(`http://localhost:8080/ChatRoom/roomMembers?roomName=${roomName}&currentMembers=${parseInt(currentMembers)}`);
+            socket.close();
+        }
+    }
 
     function sendMessage() {
         if (messageText.trim() !== '' && socket) {
@@ -70,7 +81,7 @@ function Chat({userName, roomName}) {
         <div id='room'>
             <div id='chat' ref={chatRef}>
                 {messages.map((message, index) => (
-                    <Message key={index} message={message}/>
+                    <Message key={index} message={message} />
                 ))}
             </div>
             <div id='textInput'>

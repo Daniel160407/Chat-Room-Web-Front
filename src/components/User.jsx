@@ -4,8 +4,9 @@ import ChatHeader from './ChatHeader';
 import Chat from './Chat';
 
 // eslint-disable-next-line react/prop-types
-function User({ chatName }) {
+function User({ chatName, currentMembers}) {
     const [userName, setUserName] = useState('');
+    const [socket, setSocket] = useState(null);
 
     function handleUserNameChange(newUserName) {
         setUserName(newUserName);
@@ -13,8 +14,8 @@ function User({ chatName }) {
 
     return (
         <>
-            <ChatHeader chatName={chatName} onUserNameChange={handleUserNameChange} />
-            <Chat userName={userName} roomName={chatName}/>
+            <ChatHeader chatName={chatName} onUserNameChange={handleUserNameChange} socket={socket}/>
+            <Chat userName={userName} roomName={chatName} currentMembers={currentMembers} setWebSocket={setSocket}/>
         </>
     );
 }

@@ -6,7 +6,7 @@ import RoomsList from './RoomsList';
 import root from '../script/root';
 
 // eslint-disable-next-line react/prop-types
-function ChatHeader({chatName, onUserNameChange}) {
+function ChatHeader({chatName, onUserNameChange, socket}) {
     const [leaveChat, setLeaveChat] = useState(false);
     const [isProfileVisible, setProfileVisible] = useState(false);
 
@@ -25,6 +25,9 @@ function ChatHeader({chatName, onUserNameChange}) {
 
     function leave() {
         setLeaveChat(true);
+        console.log(typeof socket);
+        console.log(socket.isActive());
+        socket.close();
     }
 
     return (
