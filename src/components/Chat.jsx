@@ -41,13 +41,6 @@ function Chat({ userName, roomName, currentMembers, setWebSocket }) {
         }
     }, []);
 
-    function handleUnload() {
-        if (socket) {
-            axios.put(`http://localhost:8080/ChatRoom/roomMembers?roomName=${roomName}&currentMembers=${parseInt(currentMembers)}`);
-            socket.close();
-        }
-    }
-
     function sendMessage() {
         if (messageText.trim() !== '' && socket) {
             const messageObject = {
@@ -69,11 +62,30 @@ function Chat({ userName, roomName, currentMembers, setWebSocket }) {
         }
     }, [messages]);
 
+    useEffect(() => {
+        
+        if(socket){
+            console.log("|ehefllefd");
+            const messageObject = {
+            type: "ChangeUsernameMessage",
+            username: userName
+        };
+        socket.send(JSON.stringify(messageObject));
+        }
+        
+    }, [userName]);
+
+    function getUsers(){
+        axios.get('http://localhost:8080/ChatRoom/room');
+    }
+
     function handleKeyPress(event) {
         if (event.key === 'Enter') {
             setMessageText(event.target.value);
             sendMessage();
             event.target.value = '';
+        } else if (event.key === '@') {
+
         }
     }
 

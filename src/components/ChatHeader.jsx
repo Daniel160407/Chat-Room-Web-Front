@@ -4,6 +4,7 @@ import '../styles/chatHeader.scss';
 import Header from './Header';
 import RoomsList from './RoomsList';
 import root from '../script/root';
+import axios from 'axios';
 
 // eslint-disable-next-line react/prop-types
 function ChatHeader({chatName, onUserNameChange, socket}) {
@@ -23,11 +24,10 @@ function ChatHeader({chatName, onUserNameChange, socket}) {
         }
     }
 
-    function leave() {
-        setLeaveChat(true);
-        console.log(typeof socket);
-        console.log(socket.isActive());
+    async function leave() {
         socket.close();
+        await new Promise(resolve => setTimeout(resolve, 50));
+        setLeaveChat(true);
     }
 
     return (
