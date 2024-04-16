@@ -23,17 +23,19 @@ function RoomsList() {
     function enterRoom(roomName) {
         const currentMembersElement = document.getElementById(roomName).querySelector('.currentMembers');
         const currentMembers = currentMembersElement ? currentMembersElement.innerText : '';
-
-        fetch(`http://localhost:8080/ChatRoom/roomMembers?roomName=${roomName}&currentMembers=${parseInt(currentMembers) + 1}`, {method: 'PUT'})
-            .then(response => response.json())
-            .then(data => console.log(data));
-
-        root.render(
-            <>
-                <User chatName={roomName} currentMembers={currentMembers}/>
-            </>
-        );
+    
+        axios.put(`http://localhost:8080/ChatRoom/roomMembers?roomName=${roomName}&currentMembers=${parseInt(currentMembers) + 1}`)
+            .then(response => {    
+                if (response.status === 200) {
+                    root.render(
+                        <>
+                            <User chatName={roomName} currentMembers={currentMembers}/>
+                        </>
+                    );
+                }
+            });
     }
+    
 
     function showAddRoomWindow() {
         setAddRoomWindowVisible(!isAddRoomWindowVisible);
