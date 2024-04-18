@@ -4,7 +4,6 @@ import '../styles/chatHeader.scss';
 import Header from './Header';
 import RoomsList from './RoomsList';
 import root from '../script/root';
-import axios from 'axios';
 
 // eslint-disable-next-line react/prop-types
 function ChatHeader({chatName, onUserNameChange, socket}) {

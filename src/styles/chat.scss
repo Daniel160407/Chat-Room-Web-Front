@@ -21,6 +21,17 @@
       padding: 20px;
       background-color: $root-background-color;
 
+      $display: false;
+
+      @if $display {
+          #usernames {
+              display: flex;
+              gap: 10px;
+          }
+      }
+      
+      
+
       input {
         padding: 10px;
         border: 2px solid #ccc;
@@ -38,6 +49,21 @@
         &::placeholder {
           color: #999;
         }
+      }
+
+      #usernames{
+        width: 100px;
+        height: 40px;
+      }
+
+      .visible{
+        display: block;
+        $display: true;
+      }
+
+      .invisible {
+        display: none;
+        $display: false;
       }
   }
 }
